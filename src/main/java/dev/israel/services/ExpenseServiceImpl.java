@@ -2,7 +2,7 @@ package dev.israel.services;
 
 import dev.israel.entities.Expense;
 
-import java.util.Collection;
+import java.util.List;
 
 public class ExpenseServiceImpl implements ExpenseService{
     @Override
@@ -31,7 +31,12 @@ public class ExpenseServiceImpl implements ExpenseService{
     }
 
     @Override
-    public Collection<Expense> expenseLedger() {
+    public Expense setStatus(String status) {
+        return null;
+    }
+
+    @Override
+    public List<Expense> expenseLedger() {
         return null;
     }
 }

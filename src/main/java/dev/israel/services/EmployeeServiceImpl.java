@@ -1,13 +1,22 @@
 package dev.israel.services;
 
+import dev.israel.data.EmployeeDAO;
 import dev.israel.entities.Employee;
 
-import java.util.Collection;
+import java.awt.*;
+import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService{
+
+    private EmployeeDAO employeeDAO;
+
+    public EmployeeServiceImpl(EmployeeDAO employeeDAO) {this.employeeDAO = employeeDAO;}
+
+
+    // Create New Employee | Post Employee
     @Override
     public Employee registerEmployee(Employee employee) {
-        return null;
+        return this.employeeDAO.createEmployee(employee);
     }
 
     @Override
@@ -16,7 +25,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Collection<Employee> employeeList() {
+    public List<Employee> employeeList() {
         return null;
     }
 

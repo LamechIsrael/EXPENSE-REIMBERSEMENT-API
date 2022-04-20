@@ -2,7 +2,7 @@ package dev.israel.data;
 
 import dev.israel.entities.Expense;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface ExpenseDAO {
 
@@ -13,11 +13,10 @@ public interface ExpenseDAO {
     Expense getExpenseById(int id);
 
     // Get all Expenses
-    Collection<Expense> getAllExpenses();
+    List<Expense> getAllExpenses();
 
     // Update (Patch & Put) Expense
     Expense updateExpenseById(int id);
-
 
     // Delete Expense
     Boolean deleteExpenseById(int id);

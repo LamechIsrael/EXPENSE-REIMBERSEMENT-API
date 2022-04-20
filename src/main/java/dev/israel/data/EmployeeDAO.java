@@ -2,7 +2,7 @@ package dev.israel.data;
 
 import dev.israel.entities.Employee;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface EmployeeDAO {
 
@@ -13,7 +13,7 @@ public interface EmployeeDAO {
     Employee getEmployeeById(int id);
 
     // Get all Employees
-    Collection<Employee> getAllEmployees();
+    List<Employee> getAllEmployees();
 
     // Update Employee
     Employee updateEmployee(Employee employee);

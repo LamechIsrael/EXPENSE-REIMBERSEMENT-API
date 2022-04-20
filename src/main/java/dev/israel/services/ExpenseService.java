@@ -3,6 +3,7 @@ package dev.israel.services;
 import dev.israel.entities.Expense;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface ExpenseService {
 
@@ -16,5 +17,7 @@ public interface ExpenseService {
 
     Expense updateExpenseItem(Expense expense);
 
-    Collection<Expense> expenseLedger();
+    Expense setStatus(String status);
+
+    List<Expense> expenseLedger();
 }

@@ -2,7 +2,7 @@ package dev.israel.data;
 
 import dev.israel.entities.Expense;
 
-import java.util.Collection;
+import java.util.List;
 
 public class ExpenseDAOPostgresImpl implements ExpenseDAO{
     @Override
@@ -16,7 +16,7 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
     }
 
     @Override
-    public Collection<Expense> getAllExpenses() {
+    public List<Expense> getAllExpenses() {
         return null;
     }
 

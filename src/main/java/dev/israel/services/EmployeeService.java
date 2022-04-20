@@ -3,6 +3,7 @@ package dev.israel.services;
 import dev.israel.entities.Employee;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface EmployeeService {
 
@@ -11,7 +12,7 @@ public interface EmployeeService {
 
     // Get Employee
     Employee retrieveEmployeeById(int id);
-    Collection<Employee> employeeList();
+    List<Employee> employeeList();
 
     // Update Employee
     Employee exchangeEmployee(Employee employee);
