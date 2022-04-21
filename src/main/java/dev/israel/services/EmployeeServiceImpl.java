@@ -2,6 +2,8 @@ package dev.israel.services;
 
 import dev.israel.data.EmployeeDAO;
 import dev.israel.entities.Employee;
+import dev.israel.utilities.LogLevel;
+import dev.israel.utilities.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     // Create New Employee | POST Employee
     @Override
     public Employee registerEmployee(Employee employee) {
+        Logger.logInfo("A new employee: " + employee.getFirstName() + " " + employee.getLastName() +
+                " with the ID " + employee.getId() + " was added to the system.", LogLevel.INFO);
         return this.employeeDAO.createEmployee(employee);
     }
 
@@ -48,6 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     // PUT Employee
     @Override
     public Employee exchangeEmployee(Employee employee) {
-        return null;
+        Logger.logInfo("An employee with the ID " + employee.getId() + " was altered.", LogLevel.INFO);
+        return this.employeeDAO.updateEmployee(employee);
     }
 }

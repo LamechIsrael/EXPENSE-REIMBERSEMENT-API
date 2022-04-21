@@ -1,6 +1,7 @@
 package dev.israel.data;
 
 import dev.israel.entities.Employee;
+import dev.israel.exceptions.ResourceNotFound;
 import dev.israel.utilities.ConnectionUtil;
 
 import java.sql.*;
@@ -47,6 +48,9 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
 
             ResultSet rs = ps.executeQuery();
             rs.next();
+//            if(rs.getFetchSize() == 0){
+//                throw new ResourceNotFound(id);
+//            }
             Employee employee = new Employee();
             employee.setId(rs.getInt("employee_id"));
             employee.setFirstName(rs.getString("first_name"));
@@ -56,9 +60,6 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
             e.printStackTrace();
             return null;
         }
-
-
-
     }
 
     @Override
@@ -88,9 +89,29 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
         }
     }
 
+    // Update Employee | PUT or PATCH Employee
     @Override
     public Employee updateEmployee(Employee employee) {
-        return null;
+
+        try {
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "update employees set first_name = ?, last_name = ? where employee_id = ?";
+            PreparedStatement ps = null;
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, employee.getFirstName());
+            ps.setString(2, employee.getLastName());
+            ps.setInt(3, employee.getId());
+
+            int rowsUpdated = ps.executeUpdate();
+            if(rowsUpdated==0){
+                throw new ResourceNotFound(employee.getId());
+            }
+            return employee;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

@@ -4,10 +4,7 @@ package dev.israel.datatests;
 import dev.israel.data.EmployeeDAO;
 import dev.israel.data.EmployeeDAOPostgresImpl;
 import dev.israel.entities.Employee;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class EmployeeDAOTests {
@@ -17,6 +14,7 @@ public class EmployeeDAOTests {
 
     //POST TEST
     @Test
+    @Order(1)
     void create_Employee(){
         Employee jimmy = new Employee(0, "Jimmy", "Kudo");
         Employee savedEmployee = employeeDAO.createEmployee(jimmy);
@@ -26,16 +24,27 @@ public class EmployeeDAOTests {
 
     //GET TEST
     @Test
+    @Order(2)
     void get_Employee_By_Id(){
-        Employee retrievedEmployee = employeeDAO.getEmployeeById(testEmployee.getId());
+        Employee retrievedEmployee = employeeDAO.getEmployeeById(3);
         Assertions.assertEquals("Jimmy", retrievedEmployee.getFirstName());
     }
 
     @Test
+    @Order(3)
     void get_all_employees(){
         int totalEmployees = employeeDAO.getAllEmployees().size();
         Assertions.assertTrue(totalEmployees >= 2);
     }
 
-    //
+    //PUT TEST
+    @Test
+    @Order(4)
+    void update_employee(){
+        EmployeeDAOTests.testEmployee.setFirstName("Shudowudo");
+        employeeDAO.updateEmployee(testEmployee);
+        Employee retrievedEmployee = employeeDAO.getEmployeeById(testEmployee.getId());
+
+        Assertions.assertEquals("Shudowudo", retrievedEmployee.getFirstName());
+    }
 }

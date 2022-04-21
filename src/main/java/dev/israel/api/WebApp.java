@@ -57,6 +57,16 @@ public class WebApp {
             }
         });
 
+        //Replace the employee | PUT Employee
+        app.put("/employees/{id}", context -> {
+            int id = Integer.parseInt(context.pathParam("id"));
+            String body = context.body();
+            Employee employee = gson.fromJson(body, Employee.class);
+            employee.setId(id);
+            employeeService.exchangeEmployee(employee);
+            context.result("Employee Replaced");
+        });
+
 
 
         app.start(5001);
