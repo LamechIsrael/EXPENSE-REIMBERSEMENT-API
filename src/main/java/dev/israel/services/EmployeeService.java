@@ -13,6 +13,7 @@ public interface EmployeeService {
     // Get Employee
     Employee retrieveEmployeeById(int id);
     List<Employee> employeeList();
+    List<Employee> getEmployeeByName(String firstName);
 
     // Update Employee
     Employee exchangeEmployee(Employee employee);

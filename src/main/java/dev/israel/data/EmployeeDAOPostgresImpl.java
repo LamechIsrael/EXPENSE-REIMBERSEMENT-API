@@ -4,6 +4,7 @@ import dev.israel.entities.Employee;
 import dev.israel.utilities.ConnectionUtil;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDAOPostgresImpl implements EmployeeDAO{
@@ -36,12 +37,55 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
     // Get employees by Id | GET Employee
     @Override
     public Employee getEmployeeById(int id) {
-        return null;
+
+
+        try {
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "select * from employees where employee_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            Employee employee = new Employee();
+            employee.setId(rs.getInt("employee_id"));
+            employee.setFirstName(rs.getString("first_name"));
+            employee.setLastName(rs.getString("last_name"));
+            return employee;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+
     }
 
     @Override
     public List<Employee> getAllEmployees() {
-        return null;
+
+
+        try {
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "select * from employees";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<Employee> employees = new ArrayList();
+
+            while(rs.next()){
+                Employee employee = new Employee();
+                employee.setId(rs.getInt("employee_id"));
+                employee.setFirstName(rs.getString("first_name"));
+                employee.setLastName(rs.getString("last_name"));
+                employees.add(employee);
+            }
+            return employees;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

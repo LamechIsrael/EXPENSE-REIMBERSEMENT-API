@@ -7,6 +7,8 @@ import dev.israel.services.EmployeeService;
 import dev.israel.services.EmployeeServiceImpl;
 import io.javalin.Javalin;
 
+import java.util.List;
+
 public class WebApp {
     //Get DAO, imps, and gson
     public static EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeDAOPostgresImpl());
@@ -27,6 +29,35 @@ public class WebApp {
             String employeeJSON = gson.toJson(employee);
             context.result(employeeJSON);
         });
+
+        // GET or READ all employees
+        app.get("/employees", context -> {
+            String firstName = context.queryParam("firstName");
+            if(firstName==null){
+                List<Employee> employees = employeeService.employeeList();
+                String employeeJSON = gson.toJson(employees);
+                context.result(employeeJSON);
+            }else{
+                List<Employee> employees = employeeService.getEmployeeByName(firstName);
+                String employeeJSON = gson.toJson(employees);
+                context.result(employeeJSON);
+            }
+        });
+
+        //GET Employee by Id
+        app.get("/employees/{id}", context -> {
+            int id  = Integer.parseInt(context.pathParam("id"));
+
+            try{
+                String employeeJSON = gson.toJson(employeeService.retrieveEmployeeById(id));
+                context.result(employeeJSON);
+            } catch (Exception e) {
+                context.status(404);
+                context.result("The employee id " + id + " was not found");
+            }
+        });
+
+
 
         app.start(5001);
     }

@@ -15,6 +15,7 @@ public class EmployeeDAOTests {
     static EmployeeDAO employeeDAO = new EmployeeDAOPostgresImpl();
     static Employee testEmployee = null;
 
+    //POST TEST
     @Test
     void create_Employee(){
         Employee jimmy = new Employee(0, "Jimmy", "Kudo");
@@ -22,4 +23,19 @@ public class EmployeeDAOTests {
         EmployeeDAOTests.testEmployee = savedEmployee;
         Assertions.assertNotEquals(0,savedEmployee.getId());
     }
+
+    //GET TEST
+    @Test
+    void get_Employee_By_Id(){
+        Employee retrievedEmployee = employeeDAO.getEmployeeById(testEmployee.getId());
+        Assertions.assertEquals("Jimmy", retrievedEmployee.getFirstName());
+    }
+
+    @Test
+    void get_all_employees(){
+        int totalEmployees = employeeDAO.getAllEmployees().size();
+        Assertions.assertTrue(totalEmployees >= 2);
+    }
+
+    //
 }
