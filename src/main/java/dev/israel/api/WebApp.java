@@ -67,6 +67,19 @@ public class WebApp {
             context.result("Employee Replaced");
         });
 
+        //Remove the employee by Id | DELETE Employee
+        app.delete("/employees/{id}", context -> {
+            int id = Integer.parseInt(context.pathParam("id"));
+            boolean result = employeeService.removeEmployeeById(id);
+            if(result){
+                context.status(204);
+                context.result("Employee Deleted.");
+            }else{
+                context.status(500);
+                context.result("The employee id " + id + " was not found");
+            }
+        });
+
 
 
         app.start(5001);

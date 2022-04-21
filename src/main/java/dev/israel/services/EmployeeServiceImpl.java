@@ -55,4 +55,12 @@ public class EmployeeServiceImpl implements EmployeeService{
         Logger.logInfo("An employee with the ID " + employee.getId() + " was altered.", LogLevel.INFO);
         return this.employeeDAO.updateEmployee(employee);
     }
+
+    // DELETE Employee
+    @Override
+    public boolean removeEmployeeById(int id) {
+        boolean result = this.employeeDAO.deleteEmployeeById(id);
+        Logger.logInfo("An employee with the ID " + id + " was removed from the system.", LogLevel.INFO);
+        return result;
+    }
 }

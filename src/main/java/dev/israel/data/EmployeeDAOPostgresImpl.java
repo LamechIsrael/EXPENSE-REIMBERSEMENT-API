@@ -116,6 +116,18 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
 
     @Override
     public Boolean deleteEmployeeById(int id) {
-        return null;
+
+        try {
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "delete from employees where employee_id = ?";
+            PreparedStatement ps = null;
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

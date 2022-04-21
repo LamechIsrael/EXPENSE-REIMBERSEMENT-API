@@ -47,4 +47,12 @@ public class EmployeeDAOTests {
 
         Assertions.assertEquals("Shudowudo", retrievedEmployee.getFirstName());
     }
+
+    //DELETE TEST
+    @Test
+    @Order(5)
+    void delete_employee(){
+        boolean result = employeeDAO.deleteEmployeeById(5);
+        Assertions.assertTrue(result);
+    }
 }

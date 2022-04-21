@@ -18,5 +18,8 @@ public interface EmployeeService {
     // Update Employee
     Employee exchangeEmployee(Employee employee);
 
+    // Remove Employee
+    boolean removeEmployeeById(int id);
+
 
 }
