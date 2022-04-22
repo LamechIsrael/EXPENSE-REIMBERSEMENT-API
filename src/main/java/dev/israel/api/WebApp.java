@@ -26,6 +26,12 @@ public class WebApp {
         // Get Javalin for web functionality
         Javalin app = Javalin.create();
 
+        // Main Page
+        app.get("/", context -> {
+            context.status(200);
+            context.result("Welcome to Lamech's Employee/Expense page.");
+        });
+
         // CREATE or POST
         app.post("/employees", context -> {
             String body = context.body();
@@ -110,6 +116,6 @@ public class WebApp {
             context.result(expenseJSON);
         });
 
-        app.start(5001);
+        app.start(5000);
     }
 }
