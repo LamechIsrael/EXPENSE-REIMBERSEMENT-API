@@ -13,7 +13,7 @@ public class Logger {
         String logMessage = level.name() + " " + message + " " + new Date() + " \n";
 
         try {
-            Files.write(Paths.get("/Users/lamechisrael/PleasantViewLibrary/applogs.log"),
+            Files.write(Paths.get("/Users/lamechisrael/LamechProject1/project1.log"),
                     logMessage.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();

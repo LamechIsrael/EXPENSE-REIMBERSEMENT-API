@@ -36,12 +36,12 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public List<Employee> getEmployeeByName(String firstName) {
+    public List<Employee> getEmployeeByName(String name) {
         List<Employee> allEmployees = this.employeeDAO.getAllEmployees();
 
         List<Employee> filteredEmployees = new ArrayList();
         for(int i = 0; i<allEmployees.size(); i++){
-            if(allEmployees.get(i).getFirstName().equalsIgnoreCase(firstName)){
+            if(allEmployees.get(i).getFirstName().equalsIgnoreCase(name) || allEmployees.get(i).getLastName().equalsIgnoreCase(name)){
                 filteredEmployees.add(allEmployees.get(i));
             }
         }

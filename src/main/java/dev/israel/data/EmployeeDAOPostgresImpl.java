@@ -41,20 +41,27 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
 
 
         try {
+            // Connects to database
             Connection conn = ConnectionUtil.createConnection();
             String sql = "select * from employees where employee_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
 
+            // Fetches ID
             ResultSet rs = ps.executeQuery();
             rs.next();
-//            if(rs.getFetchSize() == 0){
-//                throw new ResourceNotFound(id);
-//            }
+
+            // Check to see if person under id exists
+            if(rs.getRow() == 0){
+                throw new ResourceNotFound(id);
+            }
+
+            // Return Employee
             Employee employee = new Employee();
             employee.setId(rs.getInt("employee_id"));
             employee.setFirstName(rs.getString("first_name"));
             employee.setLastName(rs.getString("last_name"));
+            System.out.println(employee);
             return employee;
         } catch (SQLException e) {
             e.printStackTrace();

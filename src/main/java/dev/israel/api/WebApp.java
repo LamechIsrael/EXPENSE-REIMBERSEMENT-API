@@ -1,10 +1,15 @@
 package dev.israel.api;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import dev.israel.data.EmployeeDAOPostgresImpl;
+import dev.israel.data.ExpenseDAOPostgresImpl;
 import dev.israel.entities.Employee;
+import dev.israel.entities.Expense;
 import dev.israel.services.EmployeeService;
 import dev.israel.services.EmployeeServiceImpl;
+import dev.israel.services.ExpenseService;
+import dev.israel.services.ExpenseServiceImpl;
 import io.javalin.Javalin;
 
 import java.util.List;
@@ -12,6 +17,7 @@ import java.util.List;
 public class WebApp {
     //Get DAO, imps, and gson
     public static EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeDAOPostgresImpl());
+    public static ExpenseService expenseService = new ExpenseServiceImpl(new ExpenseDAOPostgresImpl());
     public static Gson gson = new Gson();
 
     // Start writing program
@@ -32,9 +38,10 @@ public class WebApp {
 
         // GET or READ all employees
         app.get("/employees", context -> {
-            String firstName = context.queryParam("firstName");
+            String firstName = context.queryParam("name");
             if(firstName==null){
                 List<Employee> employees = employeeService.employeeList();
+                context.status(200);
                 String employeeJSON = gson.toJson(employees);
                 context.result(employeeJSON);
             }else{
@@ -50,21 +57,29 @@ public class WebApp {
 
             try{
                 String employeeJSON = gson.toJson(employeeService.retrieveEmployeeById(id));
+                context.status(200);
                 context.result(employeeJSON);
             } catch (Exception e) {
                 context.status(404);
-                context.result("The employee id " + id + " was not found");
+                context.result("The employee id " + id + " was not found.");
             }
         });
 
         //Replace the employee | PUT Employee
         app.put("/employees/{id}", context -> {
             int id = Integer.parseInt(context.pathParam("id"));
-            String body = context.body();
-            Employee employee = gson.fromJson(body, Employee.class);
-            employee.setId(id);
-            employeeService.exchangeEmployee(employee);
-            context.result("Employee Replaced");
+            try{
+                String body = context.body();
+                Employee employee = gson.fromJson(body, Employee.class);
+                employee.setId(id);
+                employeeService.exchangeEmployee(employee);
+                context.status(201);
+                context.result("Employee Replaced");
+            } catch (JsonSyntaxException e) {
+                context.status(404);
+                context.result("The employee id " + id + " was not found.");
+            }
+
         });
 
         //Remove the employee by Id | DELETE Employee
@@ -75,12 +90,25 @@ public class WebApp {
                 context.status(204);
                 context.result("Employee Deleted.");
             }else{
-                context.status(500);
+                context.status(404);
                 context.result("The employee id " + id + " was not found");
             }
         });
 
 
+
+        // EXPENSE FUNCTIONALITY
+        //
+        //
+        // CREATE
+        app.post("/expenses", context -> {
+            String body = context.body();
+            Expense expense = gson.fromJson(body, Expense.class);
+            expenseService.registerExpenseItem(expense);
+            context.status(201);
+            String expenseJSON = gson.toJson(expense);
+            context.result(expenseJSON);
+        });
 
         app.start(5001);
     }

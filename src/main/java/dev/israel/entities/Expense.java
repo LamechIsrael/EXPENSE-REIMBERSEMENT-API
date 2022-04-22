@@ -13,6 +13,7 @@ public class Expense {
     private int id;
     private String itemName;
     private Double itemCost;
+    private int purchasingEmployeeId;
 
 
     @Override
@@ -21,9 +22,9 @@ public class Expense {
                 "id=" + id +
                 ", itemName='" + itemName + '\'' +
                 ", itemCost=" + itemCost +
+                ", purchasingEmployeeId=" + purchasingEmployeeId +
                 '}';
     }
-
 }
 
 
