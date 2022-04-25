@@ -5,6 +5,7 @@ import dev.israel.entities.Expense;
 import dev.israel.utilities.LogLevel;
 import dev.israel.utilities.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExpenseServiceImpl implements ExpenseService{
@@ -20,14 +21,28 @@ public class ExpenseServiceImpl implements ExpenseService{
         return this.expenseDAO.createExpense(expense);
     }
 
+    // Get Expenses | GET
     @Override
     public Expense getExpenseItemById(int id) {
-        return null;
+        return this.expenseDAO.getExpenseById(id);
     }
 
     @Override
-    public Expense getExpenseStatusById(int id) {
-        return null;
+    public List<Expense> expenseLedger() {
+
+        return this.expenseDAO.getAllExpenses();
+    }
+
+    @Override
+    public List<Expense> getExpenseByStatus(String status) {
+        List<Expense> allExpenses = this.expenseDAO.getAllExpenses();
+        List<Expense> filteredExpenses = new ArrayList<>();
+        for(int i=0; i< allExpenses.size(); i++){
+            if(allExpenses.get(i).getStatus().equalsIgnoreCase(status)){
+                filteredExpenses.add(allExpenses.get(i));
+            }
+        }
+        return filteredExpenses;
     }
 
     @Override
@@ -45,8 +60,5 @@ public class ExpenseServiceImpl implements ExpenseService{
         return null;
     }
 
-    @Override
-    public List<Expense> expenseLedger() {
-        return null;
-    }
+
 }

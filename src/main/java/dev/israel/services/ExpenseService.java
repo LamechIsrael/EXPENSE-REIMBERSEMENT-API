@@ -2,22 +2,29 @@ package dev.israel.services;
 
 import dev.israel.entities.Expense;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface ExpenseService {
 
+    // POST
     Expense registerExpenseItem(Expense expense);
 
+    // GET
     Expense getExpenseItemById(int id);
+    List<Expense> expenseLedger();
 
-    Expense getExpenseStatusById(int id);
+    List<Expense> getExpenseByStatus(String status);
 
-    Expense exchangeExpenseItem(Expense expense);
-
+    //PATCH
     Expense updateExpenseItem(Expense expense);
 
     Expense setStatus(String status);
 
-    List<Expense> expenseLedger();
+    // PUT
+    Expense exchangeExpenseItem(Expense expense);
+
+
+
+    // DELETE
+
 }

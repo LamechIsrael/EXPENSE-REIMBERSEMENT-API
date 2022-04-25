@@ -13,6 +13,7 @@ public class Expense {
     private int id;
     private String itemName;
     private Double itemCost;
+    private String status;
     private int purchasingEmployeeId;
 
 
@@ -22,10 +23,12 @@ public class Expense {
                 "id=" + id +
                 ", itemName='" + itemName + '\'' +
                 ", itemCost=" + itemCost +
+                ", status='" + status + '\'' +
                 ", purchasingEmployeeId=" + purchasingEmployeeId +
                 '}';
     }
 }
+
 
 
 

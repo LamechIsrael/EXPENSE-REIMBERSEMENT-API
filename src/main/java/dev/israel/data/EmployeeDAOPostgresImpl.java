@@ -15,8 +15,7 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
     public Employee createEmployee(Employee employee) {
 
 
-        try {
-            Connection conn = ConnectionUtil.createConnection();
+        try (Connection conn = ConnectionUtil.createConnection()) {
             String sql = "insert into employees values (default, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, employee.getFirstName());
@@ -40,9 +39,8 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
     public Employee getEmployeeById(int id) {
 
 
-        try {
+        try (Connection conn = ConnectionUtil.createConnection()) {
             // Connects to database
-            Connection conn = ConnectionUtil.createConnection();
             String sql = "select * from employees where employee_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
@@ -73,8 +71,8 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
     public List<Employee> getAllEmployees() {
 
 
-        try {
-            Connection conn = ConnectionUtil.createConnection();
+        try (Connection conn = ConnectionUtil.createConnection()) {
+
             String sql = "select * from employees";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -103,8 +101,7 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
         try {
             Connection conn = ConnectionUtil.createConnection();
             String sql = "update employees set first_name = ?, last_name = ? where employee_id = ?";
-            PreparedStatement ps = null;
-            ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, employee.getFirstName());
             ps.setString(2, employee.getLastName());
             ps.setInt(3, employee.getId());
@@ -124,11 +121,9 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO{
     @Override
     public Boolean deleteEmployeeById(int id) {
 
-        try {
-            Connection conn = ConnectionUtil.createConnection();
+        try (Connection conn = ConnectionUtil.createConnection()) {
             String sql = "delete from employees where employee_id = ?";
-            PreparedStatement ps = null;
-            ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             ps.execute();
             return true;

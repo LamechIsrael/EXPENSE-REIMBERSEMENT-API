@@ -116,6 +116,35 @@ public class WebApp {
             context.result(expenseJSON);
         });
 
-        app.start(5000);
+        // GET by id
+        app.get("/expenses/{id}", context -> {
+            int id = Integer.parseInt(context.pathParam("id"));
+
+            try {
+                String expenseJSON = gson.toJson(expenseService.getExpenseItemById(id));
+                context.status(200);
+                context.result(expenseJSON);
+            }catch (JsonSyntaxException e){
+                context.status(404);
+                context.result("The idem id: " + id + " was not found.");
+            }
+        });
+
+        // GET all expenses
+        app.get("/expenses", context -> {
+            String itemStatus = context.queryParam("status");
+            if(itemStatus == null) {
+                List<Expense> expenses = expenseService.expenseLedger();
+                context.status(200);
+                String expenseJSON = gson.toJson(expenses);
+                context.result(expenseJSON);
+            }else{
+                List<Expense> expenses = expenseService.getExpenseByStatus(itemStatus);
+                String expenseJSON = gson.toJson(expenses);
+                context.result(expenseJSON);
+            }
+        });
+
+        app.start(5001);
     }
 }

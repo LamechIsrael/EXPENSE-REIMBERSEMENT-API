@@ -1,9 +1,11 @@
 package dev.israel.data;
 
 import dev.israel.entities.Expense;
+import dev.israel.exceptions.ResourceNotFound;
 import dev.israel.utilities.ConnectionUtil;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExpenseDAOPostgresImpl implements ExpenseDAO{
@@ -11,11 +13,11 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
     public Expense createExpense(Expense expense) {
 
         // Create connection to expenses table in project1 database
-        Connection conn = ConnectionUtil.createConnection();
-        String sql = "insert into expenses values (default, ?, ?, ?)";
-        PreparedStatement ps = null;
+
         try {
-            ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "insert into expenses values (default, ?, ?, default, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, expense.getItemName());
             ps.setDouble(2, expense.getItemCost());
             ps.setInt(3, expense.getPurchasingEmployeeId());
@@ -34,14 +36,62 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
         }
     }
 
+
+    // Get Expenses by Id | GET expense
     @Override
     public Expense getExpenseById(int id) {
-        return null;
+
+
+        try {
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "select * from expenses where item_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+
+            // Fetches ID from database
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+
+            if(rs.getRow() !=0){
+                Expense expense = new Expense();
+                expense.setId(rs.getInt("item_id"));
+                expense.setItemName(rs.getString("item_name"));
+                expense.setItemCost(rs.getDouble("item_cost"));
+                expense.setStatus(rs.getString("item_status"));
+                expense.setPurchasingEmployeeId(rs.getInt("purchasing_employee_id"));
+                return expense;
+            }else throw new ResourceNotFound(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public List<Expense> getAllExpenses() {
-        return null;
+        try (Connection conn = ConnectionUtil.createConnection()) {
+            String sql = "select * from expenses";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<Expense> expenses = new ArrayList();
+
+            while(rs.next()){
+                Expense expense = new Expense();
+                expense.setItemName(rs.getString("item_name"));
+                expense.setItemCost(rs.getDouble("item_cost"));
+                expense.setId(rs.getInt("item_id"));
+                expense.setPurchasingEmployeeId(rs.getInt("purchasing_employee_id"));
+                expense.setStatus(rs.getString("item_status"));
+                expenses.add(expense);
+            }
+
+            return expenses;
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
