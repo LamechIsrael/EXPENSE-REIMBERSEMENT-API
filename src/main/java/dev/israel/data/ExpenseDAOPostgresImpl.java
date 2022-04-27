@@ -95,12 +95,43 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
     }
 
     @Override
-    public Expense updateExpenseById(int id) {
-        return null;
+    public Expense updateExpenseById(Expense expense) {
+
+
+
+        try {
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "update expenses set item_name = ?, item_cost = ?, item_status = ? where item_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, expense.getItemName());
+            ps.setDouble(2, expense.getItemCost());
+            ps.setString(3, expense.getStatus());
+            ps.setInt(4, expense.getId());
+
+            int rowsUpdated = ps.executeUpdate();
+            if(rowsUpdated==0){
+                throw new ResourceNotFound(expense.getId());
+            }
+            return expense;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
     public Boolean deleteExpenseById(int id) {
-        return null;
+        try (Connection conn = ConnectionUtil.createConnection()) {
+            String sql = "delete from expenses where item_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

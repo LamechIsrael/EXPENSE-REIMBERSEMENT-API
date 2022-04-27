@@ -17,7 +17,7 @@ public class ExpenseServiceImpl implements ExpenseService{
     @Override
     public Expense registerExpenseItem(Expense expense)
     {
-        Logger.logInfo("A" + expense.getItemName() + " was added to the system as an expense.", LogLevel.INFO);
+        Logger.logInfo("A " + expense.getItemName() + " was added to the system as an expense.", LogLevel.INFO);
         return this.expenseDAO.createExpense(expense);
     }
 
@@ -47,17 +47,29 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public Expense exchangeExpenseItem(Expense expense) {
-        return null;
+        Logger.logInfo("An item with the ID " + expense.getId() + " was altered.", LogLevel.INFO);
+        return this.expenseDAO.updateExpenseById(expense);
+    }
+
+    @Override
+    public boolean removeExpenseById(int id) {
+        boolean result = this.expenseDAO.deleteExpenseById(id);
+        Logger.logInfo("An item with the ID " + id + " was removed from the system.", LogLevel.INFO);
+        return result;
     }
 
     @Override
     public Expense updateExpenseItem(Expense expense) {
-        return null;
+        return this.expenseDAO.updateExpenseById(expense);
     }
 
     @Override
-    public Expense setStatus(String status) {
-        return null;
+    public Expense changeStatus(int id, String status) {
+        Expense expense = this.expenseDAO.getExpenseById(id);
+        expense.setStatus(status);
+        this.expenseDAO.updateExpenseById(expense);
+        Logger.logInfo("An item with the ID " + expense.getId() + " was " + status + ".", LogLevel.INFO);
+        return expense;
     }
 
 

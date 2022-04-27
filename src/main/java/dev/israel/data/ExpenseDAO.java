@@ -16,7 +16,7 @@ public interface ExpenseDAO {
     List<Expense> getAllExpenses();
 
     // Update (Patch & Put) Expense
-    Expense updateExpenseById(int id);
+    Expense updateExpenseById(Expense expense);
 
     // Delete Expense
     Boolean deleteExpenseById(int id);

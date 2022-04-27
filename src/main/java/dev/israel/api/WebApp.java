@@ -126,7 +126,7 @@ public class WebApp {
                 context.result(expenseJSON);
             }catch (JsonSyntaxException e){
                 context.status(404);
-                context.result("The idem id: " + id + " was not found.");
+                context.result("The item id: " + id + " was not found.");
             }
         });
 
@@ -142,6 +142,57 @@ public class WebApp {
                 List<Expense> expenses = expenseService.getExpenseByStatus(itemStatus);
                 String expenseJSON = gson.toJson(expenses);
                 context.result(expenseJSON);
+            }
+        });
+
+        // PATCH expense by id
+
+        app.patch("/expenses/{id}/{status}", context -> {
+           int id = Integer.parseInt(context.pathParam("id"));
+           String status = context.pathParam("status");
+
+           try{
+               if(status.equalsIgnoreCase("approved") || status.equalsIgnoreCase("denied")){
+                   expenseService.changeStatus(id, status);
+                   context.result("Expense " + status);
+                   context.status(200);
+               }else{
+                   context.result("Invalid option. Please type \'approved\' or \'denied.\'");
+               }
+           }catch (JsonSyntaxException e){
+               context.status(404);
+               context.result("Item id not found");
+           }
+
+        });
+
+        //PUT expense
+        app.put("/expenses/{id}", context -> {
+           int id = Integer.parseInt(context.pathParam("id"));
+           try{
+               String body = context.body();
+               Expense expense = gson.fromJson(body, Expense.class);
+               expense.setId(id);
+               expenseService.exchangeExpenseItem(expense);
+               context.status(201);
+               context.result("Expense replaced.");
+
+           }catch (JsonSyntaxException e){
+               context.status(404);
+               context.result("Item id not found");
+           }
+        });
+
+        // DELETE
+        app.delete("/expenses/{id}", context -> {
+            int id = Integer.parseInt(context.pathParam("id"));
+            boolean result = expenseService.removeExpenseById(id);
+            if (result){
+                context.status(204);
+                context.result("Item removed from the system.");
+            }else{
+                context.status(500);
+                context.result("Item id not found");
             }
         });
 

@@ -25,7 +25,7 @@ public class ExpenseDAOTests {
     @Test
     @Order(2)
     void get_Expense_by_Id(){
-        Expense retrievedExpense = expenseDAO.getExpenseById(3);
+        Expense retrievedExpense = expenseDAO.getExpenseById(testExpense.getId());
         Assertions.assertEquals("Ratchet", retrievedExpense.getItemName());
     }
 
@@ -36,5 +36,15 @@ public class ExpenseDAOTests {
         Assertions.assertTrue(totalExpenses>=1);
     }
 
+    @Test
+    @Order(4)
+    void update_Expenses(){
+        ExpenseDAOTests.testExpense.setItemCost(24.99);
+        expenseDAO.updateExpenseById(testExpense);
+        Expense retrievedExpense = expenseDAO.getExpenseById(testExpense.getId());
 
+        System.out.println(expenseDAO.getExpenseById(testExpense.getId()));
+        Assertions.assertEquals(24.99, retrievedExpense.getItemCost());
+
+    }
 }

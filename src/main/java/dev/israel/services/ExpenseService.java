@@ -18,13 +18,12 @@ public interface ExpenseService {
     //PATCH
     Expense updateExpenseItem(Expense expense);
 
-    Expense setStatus(String status);
+    Expense changeStatus(int id, String status);
 
     // PUT
     Expense exchangeExpenseItem(Expense expense);
 
-
-
     // DELETE
+    boolean removeExpenseById(int id);
 
 }

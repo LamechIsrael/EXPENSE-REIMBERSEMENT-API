@@ -2,3 +2,8 @@ INFO Hello. Thu Apr 21 22:43:57 PDT 2022
 DEBUG What's up!!!!! Thu Apr 21 22:43:57 PDT 2022 
 INFO Computer with the ID 0 was added to the system. Thu Apr 21 22:58:52 PDT 2022 
 INFO A new employee: Sherlock Holmes with the ID 0 was added to the system. Mon Apr 25 08:20:51 PDT 2022 
+INFO AComputer was added to the system as an expense. Tue Apr 26 15:33:15 PDT 2022 
+INFO An item with the ID 2 was approved. Tue Apr 26 17:25:10 PDT 2022 
+INFO An item with the ID 1 was altered. Tue Apr 26 17:34:40 PDT 2022 
+INFO An item with the ID 1 was altered. Tue Apr 26 17:34:51 PDT 2022 
+INFO An item with the ID 1 was removed from the system. Tue Apr 26 17:39:06 PDT 2022 

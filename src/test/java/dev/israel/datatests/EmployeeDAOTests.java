@@ -41,6 +41,7 @@ public class EmployeeDAOTests {
     @Test
     @Order(4)
     void update_employee(){
+        testEmployee = employeeDAO.getEmployeeById(2);
         EmployeeDAOTests.testEmployee.setFirstName("Shudowudo");
         employeeDAO.updateEmployee(testEmployee);
         Employee retrievedEmployee = employeeDAO.getEmployeeById(testEmployee.getId());
