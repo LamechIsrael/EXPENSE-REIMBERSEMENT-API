@@ -112,10 +112,17 @@ public class WebApp {
         app.post("/expenses", context -> {
             String body = context.body();
             Expense expense = gson.fromJson(body, Expense.class);
-            expenseService.registerExpenseItem(expense);
-            context.status(201);
-            String expenseJSON = gson.toJson(expense);
-            context.result(expenseJSON);
+
+            if(expense.getItemCost()>=0){
+                expenseService.registerExpenseItem(expense);
+                context.status(201);
+                String expenseJSON = gson.toJson(expense);
+                context.result(expenseJSON);
+            }else{
+                context.status(401);
+                context.result("Cannot register a negative expense.");
+            }
+
         });
 
         // GET by id
@@ -174,10 +181,15 @@ public class WebApp {
            try{
                String body = context.body();
                Expense expense = gson.fromJson(body, Expense.class);
-               expense.setId(id);
-               expenseService.exchangeExpenseItem(expense);
-               context.status(201);
-               context.result("Expense replaced.");
+               if(expense.getItemCost()>=0){
+                   expense.setId(id);
+                   expenseService.exchangeExpenseItem(expense);
+                   context.status(201);
+                   context.result("Expense replaced.");
+               }else{
+                   context.status(401);
+                   context.result("Cannot enter a negative expense.");
+               }
 
            }catch (JsonSyntaxException e){
                context.status(404);
@@ -236,11 +248,17 @@ public class WebApp {
             int id  = Integer.parseInt(context.pathParam("id"));
             String body = context.body();
             Expense expense = gson.fromJson(body, Expense.class);
-            expense.setPurchasingEmployeeId(id);
-            expenseService.registerExpenseItem(expense);
-            context.status(201);
-            String expenseJSON = gson.toJson(expense);
-            context.result(expenseJSON + " added to \n" + employeeService.retrieveEmployeeById(id));
+            if(expense.getItemCost()>=0){
+                expense.setPurchasingEmployeeId(id);
+                expenseService.registerExpenseItem(expense);
+                context.status(201);
+                String expenseJSON = gson.toJson(expense);
+                context.result(expenseJSON + " added to \n" + employeeService.retrieveEmployeeById(id));
+            }else{
+                context.status(401);
+                context.result("Cannot enter a negative expense.");
+            }
+
         });
 
         app.start(5001);

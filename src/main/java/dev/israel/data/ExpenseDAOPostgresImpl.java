@@ -14,26 +14,29 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
 
         // Create connection to expenses table in project1 database
 
-        try {
-            Connection conn = ConnectionUtil.createConnection();
-            String sql = "insert into expenses values (default, ?, ?, default, ?)";
-            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, expense.getItemName());
-            ps.setDouble(2, expense.getItemCost());
-            ps.setInt(3, expense.getPurchasingEmployeeId());
+        if(expense.getItemCost()>=0){
+            try {
+                Connection conn = ConnectionUtil.createConnection();
+                String sql = "insert into expenses values (default, ?, ?, default, ?)";
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, expense.getItemName());
+                ps.setDouble(2, expense.getItemCost());
+                ps.setInt(3, expense.getPurchasingEmployeeId());
 
-            // Execute Query for Table
-            ps.execute();
+                // Execute Query for Table
+                ps.execute();
 
-            ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
-            int generateExpenseID = rs.getInt("item_id");
-            expense.setId(generateExpenseID);
-            return expense;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+                ResultSet rs = ps.getGeneratedKeys();
+                rs.next();
+                int generateExpenseID = rs.getInt("item_id");
+                expense.setId(generateExpenseID);
+                return expense;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
+        return null;
     }
 
 
@@ -97,28 +100,28 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
     @Override
     public Expense updateExpenseById(Expense expense) {
 
+        if(expense.getItemCost() >=0 ){
+            try {
+                Connection conn = ConnectionUtil.createConnection();
+                String sql = "update expenses set item_name = ?, item_cost = ?, item_status = ? where item_id = ?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, expense.getItemName());
+                ps.setDouble(2, expense.getItemCost());
+                ps.setString(3, expense.getStatus());
+                ps.setInt(4, expense.getId());
 
+                int rowsUpdated = ps.executeUpdate();
+                if(rowsUpdated==0){
+                    throw new ResourceNotFound(expense.getId());
+                }
+                return expense;
 
-        try {
-            Connection conn = ConnectionUtil.createConnection();
-            String sql = "update expenses set item_name = ?, item_cost = ?, item_status = ? where item_id = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, expense.getItemName());
-            ps.setDouble(2, expense.getItemCost());
-            ps.setString(3, expense.getStatus());
-            ps.setInt(4, expense.getId());
-
-            int rowsUpdated = ps.executeUpdate();
-            if(rowsUpdated==0){
-                throw new ResourceNotFound(expense.getId());
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
             }
-            return expense;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }else
             return null;
-        }
-
     }
 
     @Override
