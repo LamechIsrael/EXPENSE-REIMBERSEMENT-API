@@ -15,6 +15,8 @@ public interface ExpenseService {
 
     List<Expense> getExpenseByStatus(String status);
 
+    List<Expense> getExpenseByEmployeeID(int employeeId);
+
     //PATCH
     Expense updateExpenseItem(Expense expense);
 
@@ -25,5 +27,8 @@ public interface ExpenseService {
 
     // DELETE
     boolean removeExpenseById(int id);
+
+    //-----------------------------------------------------------------------------
+  //  Expense <Expense> getExpenseAfterEmployee(int employeeid)
 
 }

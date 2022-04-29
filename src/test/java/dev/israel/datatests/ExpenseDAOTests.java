@@ -15,7 +15,7 @@ public class ExpenseDAOTests {
     @Test
     @Order(1)
     void create_Expense() {
-        Expense ratchet = new Expense(0, "Ratchet", 11.99, null, 1);
+        Expense ratchet = new Expense(0, "Ratchet", 11.99, "", 1);
         Expense savedExpense = expenseDAO.createExpense(ratchet);
         ExpenseDAOTests.testExpense = savedExpense;
         Assertions.assertNotEquals(0, savedExpense.getId());

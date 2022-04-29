@@ -46,6 +46,18 @@ public class ExpenseServiceImpl implements ExpenseService{
     }
 
     @Override
+    public List<Expense> getExpenseByEmployeeID(int employeeId) {
+        List<Expense> allExpenses = this.expenseDAO.getAllExpenses();
+        List<Expense> filteredExpenses = new ArrayList<>();
+        for(int i=0; i< allExpenses.size(); i++){
+            if(allExpenses.get(i).getPurchasingEmployeeId() == employeeId){
+                filteredExpenses.add(allExpenses.get(i));
+            }
+        }
+        return filteredExpenses;
+    }
+
+    @Override
     public Expense exchangeExpenseItem(Expense expense) {
         Logger.logInfo("An item with the ID " + expense.getId() + " was altered.", LogLevel.INFO);
         return this.expenseDAO.updateExpenseById(expense);

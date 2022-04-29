@@ -12,7 +12,9 @@ import dev.israel.services.ExpenseService;
 import dev.israel.services.ExpenseServiceImpl;
 import io.javalin.Javalin;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WebApp {
     //Get DAO, imps, and gson
@@ -27,7 +29,7 @@ public class WebApp {
         Javalin app = Javalin.create();
 
         // Main Page
-        app.get("/", context -> {
+         app.get("/", context -> {
             context.status(200);
             context.result("Welcome to Lamech's Employee/Expense page.");
         });
@@ -157,7 +159,7 @@ public class WebApp {
                    context.result("Expense " + status);
                    context.status(200);
                }else{
-                   context.result("Invalid option. Please type \'approved\' or \'denied.\'");
+                   context.result("Invalid option. Please type 'approved' or 'denied.'");
                }
            }catch (JsonSyntaxException e){
                context.status(404);
@@ -194,6 +196,51 @@ public class WebApp {
                 context.status(500);
                 context.result("Item id not found");
             }
+        });
+
+        //---------------------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------------------
+
+        // Nested Routes
+
+        app.get("/employees/{id}/expenses", context -> {
+            int id  = Integer.parseInt(context.pathParam("id"));
+            String itemStatus = context.queryParam("status");
+            try{
+
+                if(itemStatus == null) {
+                    List<Expense> expenses = expenseService.getExpenseByEmployeeID(id);
+                    context.status(200);
+                    String expenseJSON = gson.toJson(expenses);
+                    context.result(expenseJSON);
+                }else {
+                    List<Expense> expenses = expenseService.getExpenseByEmployeeID(id);
+
+                    List<Expense> filterList = expenses.stream()
+                            .filter(expense -> expense.getStatus().equalsIgnoreCase(itemStatus))
+                            .collect(Collectors.toList());
+
+                    String expenseJSON = gson.toJson(filterList);
+                    context.status(200);
+                    context.result(expenseJSON);
+                }
+
+            } catch (Exception e) {
+                context.status(404);
+                context.result("The employee id " + id + " was not found.");
+            }
+        });
+
+        app.post("employees/{id}/expenses", context -> {
+            int id  = Integer.parseInt(context.pathParam("id"));
+            String body = context.body();
+            Expense expense = gson.fromJson(body, Expense.class);
+            expense.setPurchasingEmployeeId(id);
+            expenseService.registerExpenseItem(expense);
+            context.status(201);
+            String expenseJSON = gson.toJson(expense);
+            context.result(expenseJSON + " added to \n" + employeeService.retrieveEmployeeById(id));
         });
 
         app.start(5001);
