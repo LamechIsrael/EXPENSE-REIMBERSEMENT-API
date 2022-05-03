@@ -25,7 +25,7 @@ public class ExpenseDAOTests {
     @Test
     @Order(2)
     void get_Expense_by_Id(){
-        Expense retrievedExpense = expenseDAO.getExpenseById(testExpense.getId());
+        Expense retrievedExpense = expenseDAO.getExpenseById(2);
         Assertions.assertEquals("Ratchet", retrievedExpense.getItemName());
     }
 

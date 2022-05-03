@@ -9,7 +9,8 @@ public class ConnectionUtil {
     public static Connection createConnection(){
 
         try{
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://israel-db.cazcdjmud22d.us-west-1.rds.amazonaws.com/project1db?user=postgres&password=shadow17");
+            String databaseString = System.getenv("PROJECT_1_DB");
+            Connection conn = DriverManager.getConnection(databaseString);
             return conn;
         } catch (SQLException e){
             e.printStackTrace();

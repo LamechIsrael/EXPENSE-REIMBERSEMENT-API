@@ -1,7 +1,6 @@
 package dev.israel.api;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import dev.israel.data.EmployeeDAOPostgresImpl;
 import dev.israel.data.ExpenseDAOPostgresImpl;
 import dev.israel.entities.Employee;
@@ -83,7 +82,7 @@ public class WebApp {
                 employeeService.exchangeEmployee(employee);
                 context.status(201);
                 context.result("Employee Replaced");
-            } catch (JsonSyntaxException e) {
+            } catch (Exception e) {
                 context.status(404);
                 context.result("The employee id " + id + " was not found.");
             }
@@ -119,7 +118,7 @@ public class WebApp {
                 String expenseJSON = gson.toJson(expense);
                 context.result(expenseJSON);
             }else{
-                context.status(401);
+                context.status(404);
                 context.result("Cannot register a negative expense.");
             }
 
@@ -133,7 +132,7 @@ public class WebApp {
                 String expenseJSON = gson.toJson(expenseService.getExpenseItemById(id));
                 context.status(200);
                 context.result(expenseJSON);
-            }catch (JsonSyntaxException e){
+            }catch (Exception e){
                 context.status(404);
                 context.result("The item id: " + id + " was not found.");
             }
@@ -168,7 +167,7 @@ public class WebApp {
                }else{
                    context.result("Invalid option. Please type 'approved' or 'denied.'");
                }
-           }catch (JsonSyntaxException e){
+           }catch (Exception e){
                context.status(404);
                context.result("Item id not found");
            }
@@ -187,11 +186,11 @@ public class WebApp {
                    context.status(201);
                    context.result("Expense replaced.");
                }else{
-                   context.status(401);
+                   context.status(404);
                    context.result("Cannot enter a negative expense.");
                }
 
-           }catch (JsonSyntaxException e){
+           }catch (Exception e){
                context.status(404);
                context.result("Item id not found");
            }
@@ -261,6 +260,6 @@ public class WebApp {
 
         });
 
-        app.start(5001);
+        app.start(5000);
     }
 }

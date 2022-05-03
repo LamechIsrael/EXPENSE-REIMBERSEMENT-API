@@ -63,7 +63,7 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
                 expense.setStatus(rs.getString("item_status"));
                 expense.setPurchasingEmployeeId(rs.getInt("purchasing_employee_id"));
                 return expense;
-            }else throw new ResourceNotFound(id);
+            }else {throw new ResourceNotFound(id);}
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
