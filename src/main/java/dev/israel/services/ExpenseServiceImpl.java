@@ -57,12 +57,15 @@ public class ExpenseServiceImpl implements ExpenseService{
         return filteredExpenses;
     }
 
+    // PUT
     @Override
     public Expense exchangeExpenseItem(Expense expense) {
         Logger.logInfo("An item with the ID " + expense.getId() + " was altered.", LogLevel.INFO);
         return this.expenseDAO.updateExpenseById(expense);
     }
 
+
+    // DELETE
     @Override
     public boolean removeExpenseById(int id) {
         boolean result = this.expenseDAO.deleteExpenseById(id);
@@ -70,10 +73,12 @@ public class ExpenseServiceImpl implements ExpenseService{
         return result;
     }
 
+    // PATCH
     @Override
     public Expense updateExpenseItem(Expense expense) {
         return this.expenseDAO.updateExpenseById(expense);
     }
+
 
     @Override
     public Expense changeStatus(int id, String status) {

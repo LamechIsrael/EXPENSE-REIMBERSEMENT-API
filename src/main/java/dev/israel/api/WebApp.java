@@ -118,7 +118,7 @@ public class WebApp {
                 String expenseJSON = gson.toJson(expense);
                 context.result(expenseJSON);
             }else{
-                context.status(404);
+                context.status(405);
                 context.result("Cannot register a negative expense.");
             }
 
@@ -159,54 +159,72 @@ public class WebApp {
            int id = Integer.parseInt(context.pathParam("id"));
            String status = context.pathParam("status");
 
-           try{
-               if(status.equalsIgnoreCase("approved") || status.equalsIgnoreCase("denied")){
-                   expenseService.changeStatus(id, status);
-                   context.result("Expense " + status);
-                   context.status(200);
-               }else{
-                   context.result("Invalid option. Please type 'approved' or 'denied.'");
-               }
-           }catch (Exception e){
-               context.status(404);
-               context.result("Item id not found");
-           }
+            if(expenseService.getExpenseItemById(id).getStatus().equalsIgnoreCase("pending")){
+                try{
+                    if(status.equalsIgnoreCase("approved") || status.equalsIgnoreCase("denied")){
+                        expenseService.changeStatus(id, status);
+                        context.result("Expense " + status);
+                        context.status(200);
+                    }else{
+                        context.result("Invalid option. Please type 'approved' or 'denied.'");
+                    }
+                }catch (Exception e){
+                    context.status(404);
+                    context.result("Item id not found");
+                }
+            }else{
+                context.status(405);
+                context.result("Invalid Option. Cannot alter an expense that has been approved or denied.");
+            }
+
 
         });
 
         //PUT expense
         app.put("/expenses/{id}", context -> {
            int id = Integer.parseInt(context.pathParam("id"));
-           try{
-               String body = context.body();
-               Expense expense = gson.fromJson(body, Expense.class);
-               if(expense.getItemCost()>=0){
-                   expense.setId(id);
-                   expenseService.exchangeExpenseItem(expense);
-                   context.status(201);
-                   context.result("Expense replaced.");
-               }else{
-                   context.status(404);
-                   context.result("Cannot enter a negative expense.");
-               }
+            if(expenseService.getExpenseItemById(id).getStatus().equalsIgnoreCase("pending")){
+                try{
+                    String body = context.body();
+                    Expense expense = gson.fromJson(body, Expense.class);
+                    if(expense.getItemCost()>=0){
+                        expense.setId(id);
+                        expenseService.exchangeExpenseItem(expense);
+                        context.status(201);
+                        context.result("Expense replaced.");
+                    }else{
+                        context.status(405);
+                        context.result("Cannot enter a negative expense.");
+                    }
 
-           }catch (Exception e){
-               context.status(404);
-               context.result("Item id not found");
-           }
+                }catch (Exception e){
+                    context.status(404);
+                    context.result("Item id not found");
+                }
+            }else{
+                context.status(405);
+                context.result("Invalid Option. Cannot alter an expense that has been approved or denied.");
+            }
+
         });
 
         // DELETE
         app.delete("/expenses/{id}", context -> {
             int id = Integer.parseInt(context.pathParam("id"));
-            boolean result = expenseService.removeExpenseById(id);
-            if (result){
-                context.status(204);
-                context.result("Item removed from the system.");
+            if(expenseService.getExpenseItemById(id).getStatus().equalsIgnoreCase("pending")){
+                boolean result = expenseService.removeExpenseById(id);
+                if (result){
+                    context.status(204);
+                    context.result("Item removed from the system.");
+                }else{
+                    context.status(404);
+                    context.result("Item id not found");
+                }
             }else{
-                context.status(500);
-                context.result("Item id not found");
+                context.status(405);
+                context.result("Invalid Option. Cannot alter an expense that has been approved or denied.");
             }
+
         });
 
         //---------------------------------------------------------------------------------------------------
@@ -254,7 +272,7 @@ public class WebApp {
                 String expenseJSON = gson.toJson(expense);
                 context.result(expenseJSON + " added to \n" + employeeService.retrieveEmployeeById(id));
             }else{
-                context.status(401);
+                context.status(405);
                 context.result("Cannot enter a negative expense.");
             }
 
