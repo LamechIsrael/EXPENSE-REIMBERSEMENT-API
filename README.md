@@ -25,7 +25,7 @@ To-do list:
 
 ## Getting Started
    
-[(include git clone command)](https://github.com/LamechIsrael/EXPENSE-REIMBERSEMENT-API.git)
+[(Clone the Repo Here)](https://github.com/LamechIsrael/EXPENSE-REIMBERSEMENT-API.git)
 
 ## Usage
 
